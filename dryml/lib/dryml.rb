@@ -52,6 +52,14 @@ module Dryml
     attr_accessor :last_if
     
     def enable(generator_directories=[], output_directory=".")
+      require 'ruby-debug'; debugger
+      if (ActionView::Base.respond_to?(:xss_safe?) && ActionView::Base.xss_safe?) || true
+        Dryml.module_eval {def rails_xss_safe?; true; end}
+        require 'dryml/xss_mods'
+        Dryml::DRYMLBuilder.send(:include, Dryml::XssMods)
+      end
+
+
       ActionView::Template.register_template_handler("dryml", Dryml::TemplateHandler)
       if ActionView::Template.respond_to? :exempt_from_layout
         ActionView::Template.exempt_from_layout('dryml')
@@ -59,9 +67,9 @@ module Dryml
         ActionView::Base.exempt_from_layout('dryml')
       end
       DrymlGenerator.enable(generator_directories, output_directory)
+
     end
-    
-    
+
     def precompile_taglibs
       Dir.chdir(RAILS_ROOT) do
         taglibs = Dir["vendor/plugins/**/taglibs/**/*.dryml"] + Dir["app/views/taglibs/**/*.dryml"]

@@ -59,6 +59,7 @@ module Dryml
 
 
     def erb_process(erb_src, method_def=false)
+      require 'ruby-debug'; debugger
       trim_mode = ActionView::TemplateHandlers::ERB.erb_trim_mode
       erb = ERB.new(erb_src, nil, trim_mode, "output_buffer")
       src = erb.src.split(';')[1..-2].join(';')
@@ -77,17 +78,22 @@ module Dryml
 
       @build_instructions._?.each do |instruction|
         name = instruction[:name]
+        puts name
+        puts instruction[:type]
+        puts instruction[:src]
         case instruction[:type]
         when :eval
           @environment.class_eval(instruction[:src], template_path, instruction[:line_num])
 
         when :def
           src = erb_process(instruction[:src], true)
+          puts src
           @environment.class_eval(src, template_path, instruction[:line_num])
 
         when :render_page
           method_src = render_page_source(erb_process(instruction[:src]), local_names)
           @environment.compiled_local_names = local_names
+          puts method_src
           @environment.class_eval(method_src, template_path, instruction[:line_num])
 
         when :include
