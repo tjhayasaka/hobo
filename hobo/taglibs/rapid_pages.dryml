@@ -130,7 +130,7 @@ The easiest way to see what this tag does is to look at the source.
 See the source for the actual output
 
  -->
-<def tag="doctype" attrs="version"><%=
+<def tag="doctype" attrs="version"><%=raw
   case version.upcase
     when "HTML 4.01 STRICT"
       '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" ' + 
@@ -161,9 +161,9 @@ See the source for the actual output
   <% doctype ||= 'XHTML 1.0 TRANSITIONAL' -%>
   <doctype version="&doctype"/>
   <% attributes.reverse_merge!(:xmlns => "http://www.w3.org/1999/xhtml") if doctype.upcase =~ /^XHTML/ -%>
-  <%= "<html#{tag_options(attributes)}>" %>
+  <%=raw "<html#{tag_options(attributes, true)}>" %>
     <set-scoped xmldoctype="&doctype.upcase =~ /^XHTML/"><do param="default"/></set-scoped>
-  <%= "</html>" %>
+  <%=raw "</html>" %>
 </def>
 
 <!-- empty tags should be written as <br> in HTML and <br /> in XHTML -->
