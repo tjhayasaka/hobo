@@ -78,22 +78,17 @@ module Dryml
 
       @build_instructions._?.each do |instruction|
         name = instruction[:name]
-        puts name
-        puts instruction[:type]
-        puts instruction[:src]
         case instruction[:type]
         when :eval
           @environment.class_eval(instruction[:src], template_path, instruction[:line_num])
 
         when :def
           src = erb_process(instruction[:src], true)
-          puts src
           @environment.class_eval(src, template_path, instruction[:line_num])
 
         when :render_page
           method_src = render_page_source(erb_process(instruction[:src]), local_names)
           @environment.compiled_local_names = local_names
-          puts method_src
           @environment.class_eval(method_src, template_path, instruction[:line_num])
 
         when :include

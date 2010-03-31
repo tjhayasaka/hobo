@@ -52,7 +52,7 @@ module Dryml
     attr_accessor :last_if
     
     def enable(generator_directories=[], output_directory=".")
-      require 'ruby-debug'; debugger
+      # FIXME
       if (ActionView::Base.respond_to?(:xss_safe?) && ActionView::Base.xss_safe?) || true
         Dryml.module_eval {def rails_xss_safe?; true; end}
         require 'dryml/xss_mods'
