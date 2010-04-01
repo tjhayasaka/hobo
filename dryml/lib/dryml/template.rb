@@ -931,9 +931,13 @@ module Dryml
                 "(#{attr[1..-1]})"
               else
                 if attr !~ /"/
-                  '"' + attr + '"'
+                  if attr =~ /\#\{/
+                    '"' + attr + '"'
+                  else
+                    '"' + attr + '".html_safe!'
+                  end
                 elsif attr !~ /'/
-                  "'#{attr}'"
+                  "'#{attr}'.html_safe!"
                 else
                   dryml_exception("invalid quote(s) in attribute value")
                 end
