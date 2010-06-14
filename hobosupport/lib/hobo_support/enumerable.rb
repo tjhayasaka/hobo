@@ -76,7 +76,7 @@ module Enumerable
   def safe_join(sep=$,)
     # there's probably a better way to do this, but...
     res=self.join(sep)
-    res=res.html_safe! if (sep.nil? || sep.html_safe?) && self.all?{|a| a.html_safe?}
+    res=res.html_safe if (sep.nil? || sep.html_safe?) && self.all?{|a| a.html_safe?}
     res
   end
 end

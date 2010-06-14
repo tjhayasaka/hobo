@@ -578,14 +578,14 @@ module Dryml
             %(#{key}="#{value}")
           end
         end
-        attr_string = " #{attrs.sort * ' '}".html_safe! unless attrs.empty?
+        attr_string = " #{attrs.sort * ' '}".html_safe unless attrs.empty?
       end
 
       content = new_context { yield } if block_given?
       res = if empty
-              "<#{name}#{attr_string}#{scope.xmldoctype ? ' /' : ''}>".html_safe!
+              "<#{name}#{attr_string}#{scope.xmldoctype ? ' /' : ''}>".html_safe
             else
-              "<#{name}#{attr_string}>".html_safe!+content+"</#{name}>".html_safe!
+              "<#{name}#{attr_string}>".html_safe+content+"</#{name}>".html_safe
             end
       if block_called_from_erb? block
         concat res

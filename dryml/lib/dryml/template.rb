@@ -780,7 +780,7 @@ module Dryml
       part_name = el.attributes['part']
       if part_name
         part_id = el.attributes['id'] || part_name
-        "<div class='part-wrapper' id='<%=raw #{attribute_to_ruby part_id} %>'>".html_safe!+part_element(el, call)+"</div>".html_safe!
+        "<div class='part-wrapper' id='<%=raw #{attribute_to_ruby part_id} %>'>".html_safe+part_element(el, call)+"</div>".html_safe
       else
         call
       end
@@ -920,10 +920,10 @@ module Dryml
         case attr
         when "if"
           "(if !(#{control}).blank?; (#{x} = #{expression}; Dryml.last_if = true; #{x}) " +
-            "else (Dryml.last_if = false; ''.html_safe!); end)"
+            "else (Dryml.last_if = false; ''.html_safe); end)"
         when "unless"
           "(if (#{control}).blank?; (#{x} = #{expression}; Dryml.last_if = true; #{x}) " +
-            "else (Dryml.last_if = false; ''.html_safe!); end)"
+            "else (Dryml.last_if = false; ''.html_safe); end)"
         when "repeat"
           "repeat_attribute(#{control}) { #{expression} }"
         end
@@ -950,10 +950,10 @@ module Dryml
                   if attr =~ /\#\{/
                     '"' + attr + '"'
                   else
-                    '"' + attr + '".html_safe!'
+                    '"' + attr + '".html_safe'
                   end
                 elsif attr !~ /'/
-                  "'#{attr}'.html_safe!"
+                  "'#{attr}'.html_safe"
                 else
                   dryml_exception("invalid quote(s) in attribute value")
                 end
