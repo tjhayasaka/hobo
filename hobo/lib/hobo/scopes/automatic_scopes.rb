@@ -268,7 +268,7 @@ module Hobo
               type = klass.attr_type(field)
               if type.nil? #a virtual attribute from an SQL alias, e.g., 'total' from 'COUNT(*) AS total'
                 colspec = "#{field}" # don't prepend the table name 
-              elsif type.respond_to?(:table_name) && (name = type.name_attribute)
+              elsif type.respond_to?(:name_attribute) && (name = type.name_attribute)
                 include = field
                 colspec = "#{type.table_name}.#{name}"
               else
@@ -285,10 +285,12 @@ module Hobo
 
           when "search"
             def_scope do |query, *fields|
+              match_keyword = ::ActiveRecord::Base.connection.adapter_name == "PostgreSQL" ? "ILIKE" : "LIKE"
+
               words = query.split
               args = []
               word_queries = words.map do |word|
-                field_query = '(' + fields.map { |field| "(#{@klass.table_name}.#{field} like ?)" }.join(" OR ") + ')'
+                field_query = '(' + fields.map { |field| "(#{@klass.table_name}.#{field} #{match_keyword} ?)" }.join(" OR ") + ')'
                 args += ["%#{word}%"] * fields.length
                 field_query
               end
