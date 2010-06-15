@@ -200,7 +200,7 @@ See the source for the actual output
     
  -->
 <def tag="if-ie" attrs="version">
-  <%= "<!--[if ".html_safe+(version || 'IE'.html_safe!)+"]>".html_safe! %><do param="default"/><%=raw "<![endif]-->" %>
+  <%= "<!--[if ".html_safe+(version || 'IE'.html_safe)+"]>".html_safe %><do param="default"/><%=raw "<![endif]-->" %>
 </def>
 
 <!-- Simple wrapper for the `stylesheet_link_tag` helper. The `name` attribute can be a comma-separated list of stylesheet names.
@@ -245,7 +245,7 @@ The flash is output in a `<div class="flash notice">`, where `notice` is the `ty
 <def tag="flash-messages" attrs="names"><%=
   scope.flash_rendered = true if scope.respond_to? :flash_rendered
   names = names.nil? ? flash.keys : comma_split(names)
-  names.map { |name| flash_message :type => name }.join
+  names.map { |name| flash_message :type => name }.safe_join
 %></def>
 
 <!-- Renders `<div id="ajax-progress"><div><span id="ajax-progress-text"></span></div></div>`. The theme will style this as an ajax progress 'spinner' -->
