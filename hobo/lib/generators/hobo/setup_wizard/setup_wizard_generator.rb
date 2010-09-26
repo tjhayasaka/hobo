@@ -11,7 +11,7 @@ module Hobo
     include Generators::Hobo::Taglib
 
     def self.banner
-      "rails generate hobo:test_framework NAME [options]"
+      "rails generate hobo:setup_wizard [USER_RESOURCE_NAME=user] [options]"
     end
 
     class_option :main_title, :type => :boolean,
