@@ -98,8 +98,6 @@ module Hobo
             hobo_completions field, model, options
           end
         end
-      rescue ActiveRecord::StatementInvalid
-        # avoids an error of the initial migration
       end
 
 

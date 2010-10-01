@@ -65,14 +65,9 @@ module Hobo
 
     initializer 'hobo.dryml' do |app|
       app.config.to_prepare do
-        begin
-          Dryml::DrymlGenerator.run
-        # avoids an error of the initial migration
-        rescue Exception
-        end
+        Dryml::DrymlGenerator.run
       end
     end
-
 
   end
 end
