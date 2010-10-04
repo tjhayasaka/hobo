@@ -14,7 +14,7 @@ There is a default :count => 1
   options = {}
   attributes.each_pair{|k,v| options[k.to_sym] = h(v)}
   k = options.delete(:key)
-  I18n.t(k, {:default=>all_parameters.default, :count=>1}.merge(options)).html_safe
+  I18n.t(k, {:default=>all_parameters.default}.merge(options)).html_safe
 %></def>
 
 <!-- Wrapper around ActiveModel::Name#human with added sugar.
@@ -26,7 +26,7 @@ It dynamically pluralizes the human name by using the implicit model.count.
  - count - (optional) should be an integer and will override the default pluralization (:count=>model.count)
  -->
 
-<def tag="human-name" attrs="model, count"><%=
+<def tag="model-name-human" attrs="model, count"><%=
   model ||= this
   model = model.class unless model.kind_of? Class
   # adapted from count tag
@@ -54,7 +54,7 @@ It dynamically pluralizes the human name by using the implicit model.count.
   # prepare symbolized attributes for merging
   attrs = {}
   attributes.each_pair{|k,v| attrs[k.to_sym] = v}
-  model.human_attribute_name( attribute.to_sym, {:count=>1}.merge(attrs) )
+  model.human_attribute_name( attribute.to_sym, attrs )
 %>
 </def>
 
