@@ -11,10 +11,6 @@ ActiveRecord::Associations::ThroughAssociationScope.class_eval do
 
 end
 
-ActiveRecord::Associations::HasManyThroughAssociation.class_eval do
-  public :conditions
-end
-
 ActiveRecord::SpawnMethods.class_eval do
 
   def apply_finder_options_with_scope(options)
