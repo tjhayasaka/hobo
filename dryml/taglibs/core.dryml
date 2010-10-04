@@ -47,7 +47,7 @@ For example, you might want to wrap an `<img>` tag in an `<a>` tag but only unde
   raise ArgumentError, "Cannot <repeat> on #{this.inspect}" unless this.respond_to? :each
   context_map do
     parameters.default
-  end.safe_join(join && join.html_safe)
+  end.safe_join(join)
 %></if></def>
 
 
