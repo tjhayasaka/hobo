@@ -8,9 +8,14 @@
     timestamps
   end
 
-  # This gives admin rights to the first sign-up.
+  # This gives admin rights and an :active state to the first sign-up.
   # Just remove it if you don't want that
-  before_create { |user| user.administrator = true if !Rails.env.test? && user.class.count == 0 }
+  before_create do |user|
+    if !Rails.env.test? && user.class.count == 0
+      user.administrator = true
+      user.state = "active"
+    end
+  end
 
 <% if invite_only? -%>
   def new_password_required_with_invite_only?
@@ -29,6 +34,7 @@
 
     create :invite,
            :available_to => "acting_user if acting_user.administrator?",
+           :subsite => "<%= options[:admin_subsite_name] %>",
            :params => [:name, :email_address],
            :new_key => true,
            :become => :invited do
@@ -80,12 +86,8 @@
   # --- Permissions --- #
 
   def create_permitted?
-<% if invite_only? -%>
-    # Only the initial admin user can be created, from there it's invite-only
+    # Only the initial admin user can be created
     self.class.count == 0
-<% else -%>
-    false
-<% end -%>
   end
 
   def update_permitted?
