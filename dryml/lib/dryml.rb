@@ -73,46 +73,49 @@ module Dryml
 
     def empty_page_renderer(view)
       controller_name = view.controller.class.name.underscore.sub(/_controller$/, "")
-      page_renderer(view, [], "#{controller_name}/#{EMPTY_PAGE}")
+      page_renderer(view, "#{controller_name}/#{EMPTY_PAGE}" )
     end
 
     def call_render(view, local_assigns, identifier)
-      page = view.request.fullpath
-      renderer = page_renderer(view, local_assigns.keys, page, identifier)
+      page_path = view.request.fullpath
+      renderer = page_renderer(view, page_path, local_assigns.keys, identifier)
       this = view.controller.send(:dryml_context) || local_assigns[:this]
       view.instance_variable_set("@this", this)
       renderer.render_page(this, local_assigns).strip
     end
 
 
-    def page_renderer(view, local_names=[], page=nil, filename=nil)
-      if Rails.env.development?
-        clear_cache
-        Taglib.clear_cache
-      end
+    def page_renderer(view, page_path, local_names=[], identifier=nil)
 
       prepare_view!(view)
-      included_taglibs = ([APPLICATION_TAGLIB] + application_taglibs() + [subsite_taglib(page)] + controller_taglibs(view.controller.class)).compact
+      included_taglibs = ([APPLICATION_TAGLIB] + application_taglibs() + [subsite_taglib(page_path)] + controller_taglibs(view.controller.class)).compact
 
-      if page.ends_with?(EMPTY_PAGE)
+      if identifier.blank? && ! page_path.ends_with?(EMPTY_PAGE)
+        opt = ActionController::Routing::Routes.recognize_path(page_path)
+        identifier = view.view_paths.find( opt[:action],
+                                           opt[:controller],
+                                           false,
+                                           view.lookup_context.instance_variable_get('@details')).identifier
+      end
+      if page_path.ends_with?(EMPTY_PAGE) || identifier.starts_with?('dryml-page-tag:')
         controller_class = view.controller.class
         @tag_page_renderer_classes[controller_class.name] ||=
-          make_renderer_class("", page, local_names, DEFAULT_IMPORTS, included_taglibs)
-        @tag_page_renderer_classes[controller_class.name].new(page, view)
+          make_renderer_class("", page_path, local_names, DEFAULT_IMPORTS, included_taglibs)
+        @tag_page_renderer_classes[controller_class.name].new(page_path, view)
       else
-        mtime = File.mtime(filename)
-        renderer_class = @renderer_classes[page]
+        mtime = File.mtime(identifier)
+        renderer_class = @renderer_classes[page_path]
 
         # do we need to recompile?
         if (!renderer_class ||                                          # nothing cached?
             (local_names - renderer_class.compiled_local_names).any? || # any new local names?
             renderer_class.load_time < mtime)                           # cache out of date?
-          renderer_class = make_renderer_class(File.read(filename), filename, local_names,
+          renderer_class = make_renderer_class(File.read(identifier), identifier, local_names,
                                                DEFAULT_IMPORTS, included_taglibs)
           renderer_class.load_time = mtime
-          @renderer_classes[page] = renderer_class
+          @renderer_classes[page_path] = renderer_class
         end
-        renderer_class.new(page, view)
+        renderer_class.new(page_path, view)
       end
     end
 
@@ -172,7 +175,7 @@ module Dryml
       # Not sure why this isn't done for me...
       # There's probably a button to press round here somewhere
       for var in %w(@flash @cookies @action_name @_session @_request @request_origin
-                    @template @request @ignore_missing_templates @_headers @variables_added
+                    @request @ignore_missing_templates @_headers @variables_added
                     @_flash @response @template_class
                     @_cookies @before_filter_chain_aborted @url
                     @_response @template_root @headers @_params @params @session)
