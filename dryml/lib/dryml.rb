@@ -68,7 +68,7 @@ module Dryml
 
 
   def empty_page_renderer(view)
-    page_renderer(view, page_tag_identifier(view.controller.controller_name))
+    page_renderer(view, page_tag_identifier(view.controller.class.name.sub(/Controller$/, '').underscore))
   end
 
   def page_tag_identifier(controller_name, tag_name='')
@@ -89,7 +89,7 @@ module Dryml
 
 
   def page_renderer(view, identifier, local_names=[], controller_name=nil)
-    controller_name ||= view.controller.controller_name
+    controller_name ||= view.controller.class.name.sub(/Controller$/, '').underscore
     prepare_view!(view)
     if identifier =~ /#{ID_SEPARATOR}/
       identifier = identifier.split(ID_SEPARATOR).first
