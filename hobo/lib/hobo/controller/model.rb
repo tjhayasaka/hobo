@@ -358,16 +358,15 @@ module Hobo
         @invalid_record = this
         opt = ActionController::Routing::Routes.recognize_path(params[:page_path])
         controller = opt[:controller]
-        view = opt[:action]
-        view = default_action if view == Dryml::EMPTY_PAGE
+        action = opt[:action]
 
         # Hack fix for Bug 477.  See also bug 489.
-        if self.class.name == "#{controller.camelize}Controller" && view == "index"
+        if self.class.name == "#{controller.camelize}Controller" && action == "index"
           params['action'] = 'index'
           self.action_name = 'index'
           index
         else
-          render :template => "#{controller}/#{view}"
+          render :template => "#{controller}/#{action}"
         end
       else
         render :action => default_action
@@ -452,7 +451,7 @@ module Hobo
       do_pagination = options.delete(:paginate) && finder.respond_to?(:paginate)
       finder = Array.wrap(options.delete(:scope)).inject(finder) { |a, v| a.send(*Array.wrap(v).flatten) }
 
-      options[:order] = :default unless options[:order] || finder.send(:scope, :find)._?[:order]
+      options[:order] = finder.default_order unless options[:order] || finder.try.order_values.present?
 
       if do_pagination
         options.reverse_merge!(:page => params[:page] || 1)
@@ -735,7 +734,7 @@ module Hobo
 
     def hobo_completions(attribute, finder, options={})
       options = options.reverse_merge(:limit => 10, :param => :query, :query_scope => "#{attribute}_contains")
-      finder = finder.limit(options[:limit]) unless finder.send(:scope, :find, :limit)
+      finder = finder.limit(options[:limit]) unless finder.try.limit_value
 
       begin
         finder = finder.send(options[:query_scope], params[options[:param]])
