@@ -1,3 +1,4 @@
+require 'active_support/core_ext/string/output_safety'
 module HoboFields
   module Types
     class Text < String
