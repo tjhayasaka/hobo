@@ -14,7 +14,7 @@ module HoboFields
       end
 
       def to_html(xmldoctype = true)
-        ERB::Util.html_escape(self).sub('@', " at ").gsub('.', ' dot ').html_safe
+        self.sub('@', " at ").gsub('.', ' dot ')
       end
 
       HoboFields.register_type(:email_address, self)
