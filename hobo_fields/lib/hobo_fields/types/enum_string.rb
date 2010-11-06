@@ -14,6 +14,7 @@ module HoboFields
 
         def with_values(*values)
           @values = values.*.to_s
+
           @translated_values = Hash.new do |hash, value|
             if name.blank? || value.blank?
               hash[value] = value
@@ -21,6 +22,17 @@ module HoboFields
               hash[value] = I18n.t("#{name.tableize}.#{value}", :default => value)
               @detranslated_values[hash[value]] = value
               hash[value]
+            end
+          end
+
+          @translated_html_values = Hash.new do |hash, value|
+            if name.blank? || value.blank?
+              hash[value] = ERB::Util.html_escape(value)
+            else
+              hash[value] = I18n.t("#{name.tableize}.#{value}_html",
+                              :default => I18n.t("#{name.tableize}.#{value}.html",
+                              :default => ERB::Util.html_escape(I18n.t("#{name.tableize}.#{value}",
+                              :default => ERB::Util.html_escape(value))))).html_safe
             end
           end
 
@@ -38,6 +50,8 @@ module HoboFields
         attr_accessor :values
 
         attr_accessor :translated_values
+
+        attr_accessor :translated_html_values
 
         attr_accessor :detranslated_values
 
@@ -85,7 +99,7 @@ module HoboFields
       end
 
       def to_html(xmldoctype = true)
-        self.class.translated_values[self].html_safe
+        self.class.translated_html_values[self]
       end
 
       def ==(other)
