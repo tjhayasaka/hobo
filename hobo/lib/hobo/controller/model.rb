@@ -356,7 +356,7 @@ module Hobo
     def re_render_form(default_action=nil)
       if params[:page_path]
         @invalid_record = this
-        opt = ActionController::Routing::Routes.recognize_path(params[:page_path])
+        opt = Rails.application.routes.recognize_path(params[:page_path])
         controller = opt[:controller]
         action = opt[:action]
 
@@ -400,7 +400,7 @@ module Hobo
 
 
     def url_for_page_path
-      url_for ActionController::Routing::Routes.recognize_path(params[:page_path])
+      url_for Rails.application.routes.recognize_path(params[:page_path])
     end
 
     # TODO: Get rid of this joke of an idea that fails miserably if you open another browser window.

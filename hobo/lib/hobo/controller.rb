@@ -71,7 +71,7 @@ module Hobo
 
     def ajax_update_response(page_path, render_specs, results={})
       if page_path
-        rr = ActionController::Routing::Routes.recognize_path(page_path)
+        rr = Rails.application.routes.recognize_path(page_path)
         identifier = view_context.view_paths.find( rr[:action],
                                                    rr[:controller],
                                                    false,
