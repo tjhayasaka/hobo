@@ -593,7 +593,7 @@ module Hobo
       this.user_update_attributes(current_user, changes)
 
       # Ensure current_user isn't out of date
-      @current_user = @this if @this == current_user
+      @current_user = @this if @this == current_user && valid?
 
       in_place_edit_field = changes.keys.first if changes.size == 1 && params[:render]
       update_response(in_place_edit_field, options, &b)
