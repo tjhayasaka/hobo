@@ -87,7 +87,7 @@ module Hobo
           key_prefix ? translation.to_str+key_prefix : translation
         else
           "translation invalid: #{key}"
-        end
+        end.html_safe
       end
 
     end
