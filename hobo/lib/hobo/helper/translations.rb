@@ -36,7 +36,7 @@ module Hobo
           if key.has_key?(:default) && !key[:default].blank?
             Rails.logger.warn "hobo-i18n: 'default' should not be used as an attribute on the ht-tag. If used, then you need to make sure that the tags inner-contents are not used. These are normally treated as defaults automatically, but if there is a default attribute then that inner-content will be hidden from this method - and will not be replaced with the translation found."
           end
-          defaults = options[:default];
+          defaults = options[:default]
           # Swap key and options, remove options[:key]
           options = key
           key = options.delete(:key) # returns value for options[:key] as well as deleting it
