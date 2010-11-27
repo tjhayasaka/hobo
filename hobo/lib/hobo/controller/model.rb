@@ -446,7 +446,7 @@ module Hobo
       do_pagination = options.delete(:paginate) && finder.respond_to?(:paginate)
       finder = Array.wrap(options.delete(:scope)).inject(finder) { |a, v| a.send(*Array.wrap(v).flatten) }
 
-      options[:order] = finder.default_order unless options[:order] || finder.try.order_values.present?
+      options[:order] ||= finder.try.default_order unless finder.try.order_values.present?
 
       if do_pagination
         options.reverse_merge!(:page => params[:page] || 1)
