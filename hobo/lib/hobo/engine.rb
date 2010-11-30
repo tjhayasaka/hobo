@@ -15,6 +15,7 @@ module Hobo
       h.auto_taglibs_path = Pathname.new File.expand_path('app/views/taglibs/auto', Rails.root)
       h.read_only_file_system = !!ENV['HEROKU_TYPE']
       h.show_translation_keys = false
+      h.dryml_only_templates = false
     end
 
     ActiveSupport.on_load(:action_controller) do
@@ -23,12 +24,12 @@ module Hobo
     end
 
     ActiveSupport.on_load(:active_record) do
-      require 'hobo/extensions/active_record/association_collection'
-      require 'hobo/extensions/active_record/association_proxy'
-      require 'hobo/extensions/active_record/association_reflection'
+      require 'hobo/extensions/active_record/associations/collection'
+      require 'hobo/extensions/active_record/associations/proxy'
+      require 'hobo/extensions/active_record/associations/reflection'
       require 'hobo/extensions/active_record/hobo_methods'
       require 'hobo/extensions/active_record/permissions'
-      require 'hobo/extensions/active_record/scopes'
+      require 'hobo/extensions/active_record/associations/scope'
       require 'hobo/extensions/active_record/relation_with_origin'
       require 'hobo/extensions/active_model/name'
       require 'hobo/extensions/active_model/translation'
