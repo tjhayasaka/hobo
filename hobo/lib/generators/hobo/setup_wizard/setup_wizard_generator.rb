@@ -119,11 +119,10 @@ NOTE: You might want to sign up as the administrator before adding this!
 EOI
     end
 
-
     def dryml_only_templates_option
       if wizard?
         say_title 'Templates Option'
-        dryml_only_templates = yes_no?("Will you application use only dryml templates?\n(Choose 'n' only if you plan to use plain rails/erb templates)")
+        dryml_only_templates = yes_no?("Will you application use only hobo/dryml web page templates?\n(Choose 'n' only if you also plan to use plain rails/erb web page templates)")
       else
         dryml_only_templates = options[:dryml_only_templates]
       end
@@ -133,7 +132,6 @@ EOI
         environment "\n  config.hobo.dryml_only_templates = true\n"
       end
     end
-
 
     def rapid
       if wizard?
@@ -222,7 +220,12 @@ EOI
       ls = (locales - %w[en]).map {|l| ":#{l}" }
       lstr = ls.to_sentence
       invoke 'hobo:i18n', locales
-      say( "NOTICE: You should manually install in 'config/locales' also the official Rails locale #{ls.size==1 ? 'file' : 'files'} for #{lstr} that your application will use.", Color::YELLOW) unless ls.empty?
+      say(<<STR , Color::YELLOW) unless ls.empty?
+NOTICE: You should manually install in 'config/locales' also the official Rails locale #{ls.size==1 ? 'file' : 'files'} for #{lstr} that your application will use.
+Official rails I18n URLs:
+  - Readme:     https://github.com/svenfuchs/rails-i18n/blob/master/README.md
+  - locale dir: https://github.com/svenfuchs/rails-i18n/tree/master/rails/locale/
+STR
     end
 
     def git_repo
