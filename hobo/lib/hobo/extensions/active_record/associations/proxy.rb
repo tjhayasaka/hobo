@@ -2,6 +2,10 @@ module ActiveRecord
   module Associations
     class AssociationProxy #:nodoc:
 
+      def is_activerecord_associations_association_proxy?
+        true
+      end
+
       def origin
         proxy_owner
       end
