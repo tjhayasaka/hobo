@@ -63,7 +63,7 @@ en:
     forgot_password_sent:
       title: "Forgotten password - E-mail sent"
       heading: "Forgotten password - E-mail sent"
-      text: "En e-mail with instructions on how you generate a new password has been sent to %{email_address}. If you don't receive this e-mail please check your spamfilter."
+      text: "An e-mail with instructions on how you generate a new password has been sent to %{email_address}. If you don't receive this e-mail please check your spamfilter."
 
     account_disabled_page:
       title: "Account disabled"
@@ -137,7 +137,7 @@ en:
     # default hobo collection translation
     collection:
       count: &collection_count
-        zero: "No %{model}"
+        zero: &no_model "No %{model}"
         one: "There is only one %{model} at the moment"
         other: "There are already %{count} %{model}"
       # you can use the following to completely override the collection heading
@@ -155,7 +155,7 @@ en:
       error:
         heading: "The following error occured:"
       select_many:
-            prompt: "Add %{model}"
+        prompt: "Add %{model}"
 
     # hobo support
     support:
@@ -186,3 +186,9 @@ en:
     boolean_yes: "Yes"
     boolean_no: "No"
     password_hidden: "[password hidden]"
+
+    in_place_editor:
+      click_to_edit: "(click to edit)"
+
+    select_one_editor:
+      blank_message: *no_model
