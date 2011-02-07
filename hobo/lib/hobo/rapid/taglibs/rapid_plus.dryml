@@ -72,6 +72,7 @@ This tag assumes the controller has a `reorder` action and the model has a `posi
   singular_name = this.member_class.name.underscore
   attributes[:id] ||= "#{singular_name}_ordering"
   route_method = subsite ? "#{subsite}_reorder_#{singular_name.pluralize}_url" : "reorder_#{singular_name.pluralize}_url"
+  route_method = subsite ? "#{subsite}_reorder_#{singular_name.pluralize}_path" : "reorder_#{singular_name.pluralize}_path"
   reorder_url = send(route_method)
 %>
   <collection class="sortable" merge>
