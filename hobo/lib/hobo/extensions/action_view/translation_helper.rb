@@ -1,6 +1,6 @@
-ActionView::Helpers::TranslationHelper.module_eval do
+ActionView::Base.send :include, Hobo::Helper::Translations::Normalizer
 
-  include Hobo::Helper::Translations::Normalizer
+ActionView::Helpers::TranslationHelper.module_eval do
 
   # simple wrapper around the translate helper
   # it implements a dryml <translate> and a <t> tag
