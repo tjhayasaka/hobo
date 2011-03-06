@@ -33,11 +33,15 @@ module Hobo
       require 'hobo/extensions/active_record/relation_with_origin'
       require 'hobo/extensions/active_model/name'
       require 'hobo/extensions/active_model/translation'
+      # added legacy namespace for backward compatibility
+      # TODO: remove the following line if Hobo::VERSION > 1.3.x
+      Hobo::ViewHints = Hobo::Model::ViewHints
     end
 
     ActiveSupport.on_load(:action_view) do
       require 'hobo/extensions/action_view/tag_helper'
-      include Hobo::Extensions::ActionView::TranslationHelper
+      require 'hobo/extensions/action_view/translation_helper'
+      include Hobo::Helper::Translations::Normalizer
     end
 
     ActiveSupport.on_load(:before_initialize) do
