@@ -97,6 +97,7 @@ es:
       save: "Guardar %{model}"
       cancel: "Cancelar"
       edit: "Actualizar %{model}"
+      edit_control: "Actualizar"
       back: "Volver a"
       back_to_parent: "Volver a %{parent} %{name}"
       send: "Enviar"
@@ -138,7 +139,7 @@ es:
       current_password_is_not_correct: "no está correcta"
       you_are_site_admin: "Ahora usted es el administrador del sitio."
       you_signed_up: "Usted se inscribió."
-      no: "No hay %{model} disponibles."
+      none: "No hay %{model} disponibles."
       confirm: "¿Está seguro?"
 
     # default hobo collection translation

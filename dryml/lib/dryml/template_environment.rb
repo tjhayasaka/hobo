@@ -144,7 +144,7 @@ module Dryml
 
       id = if (typed_id = object.try.typed_id)
              typed_id
-           elsif object == @this
+           elsif object == this
              "this"
            end
       attribute ? "#{id}:#{attribute}" : id
@@ -162,7 +162,7 @@ module Dryml
 
 
     def refresh_part(encoded_context, session, dom_id)
-      context = Dryml::PartContext.for_refresh(encoded_context, @this, session)
+      context = Dryml::PartContext.for_refresh(encoded_context, this, session)
 
       with_part_context(context) do
         send("#{context.part_name}_part", *context.locals)
@@ -210,7 +210,7 @@ module Dryml
         while true
           # ActiveSupport::TimeWithZone.name would return 'Time'
           # so we add an exception to pick the right datetime type
-          type_name = ( call_type == ActiveSupport::TimeWithZone ? 'datetime' : call_type.name).underscore.gsub('/', '__')
+          type_name = ( call_type == ActiveSupport::TimeWithZone ? 'datetime' : call_type.name.to_s).underscore.gsub('/', '__')
           if respond_to?(poly_name = "#{name}__for_#{type_name}")
             found = poly_name
             break

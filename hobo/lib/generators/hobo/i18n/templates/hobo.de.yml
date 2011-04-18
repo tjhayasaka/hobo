@@ -97,6 +97,7 @@ de:
       save: "%{model} speichern"
       cancel: "Abbrechen"
       edit: "%{model} bearbeiten"
+      edit_control: "Bearbeiten"
       back: "Zurück zu"
       back_to_parent: "Zurück zu %{parent} %{name}"
       send: "Abschicken"
@@ -140,7 +141,7 @@ de:
       current_password_is_not_correct: "ist nicht korrekt"
       you_are_site_admin: "Sie sind jetzt der Administrator"
       you_signed_up: "Sie haben sich angemeldet"
-      no: "Kein %{model}-Objekt gefunden."
+      none: "Kein %{model}-Objekt gefunden."
       confirm: "Sind Sie sich sicher?"
 
     # default hobo collection translation

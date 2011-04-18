@@ -145,7 +145,7 @@ module Hobo
         self.creator_attribute         = name.to_sym if options.delete(:creator)
         validate = options.delete(:validate) {true}
 
-        #FIXME - this should be in Hobo::Model::User
+        #FIXME - this should be in Hobo::Model::UserBase
         send(:login_attribute=, name.to_sym, validate) if options.delete(:login) && respond_to?(:login_attribute=)
       end
 
@@ -360,7 +360,7 @@ module Hobo
 
 
     def to_url_path
-      "#{self.class.to_url_path}/#{to_param}" unless new_record?
+      "#{self.class.to_url_path}/#{to_param}"
     end
 
 

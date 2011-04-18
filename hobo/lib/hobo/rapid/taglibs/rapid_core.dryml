@@ -124,7 +124,9 @@ This will use `<input/>` as the tag in each table cell instead of `<view/>`
                 <td param="#{scope.field_name.to_s.sub('?', '').gsub('.', '-')}-view"><call-tag tag="&field_tag"/></td>
               </with-fields>
               <td class="controls" param="controls" if="&all_parameters[:controls]">
-                <a param="edit-link" action="edit" if="&can_edit?"><t key="hobo.action.edit">Edit</t></a>
+                <a param="edit-link" action="edit" if="&can_edit?">
+                  <t key="hobo.actions.edit_control">Edit</t>
+                </a>
                 <delete-button param/>
               </td>
             </if>
@@ -368,7 +370,7 @@ Or a new page if the context is a class:
 
       content = name if content.blank?
 
-      href = object_url(target, action, (params || {}).merge(:subsite => subsite))
+      href = object_url(target, action, (params || {}).merge(:subsite => subsite)) unless (action.nil? && target.try.new_record?)
       if href.nil?
         # This target is registered with Hobo::Routes as not linkable
         content
@@ -472,13 +474,13 @@ Assuming the context is a blog post...
 <def tag="links-for-collection"><%= this.empty? ? "(none)" : context_map { a }.safe_join(", ") %></def>
 
 <!-- Renders `this` in localized :default format. `format` can be a symbol representing a locale key or a standard format string (see strftime) -->
-<def tag="view" for="Date" attrs="format"><%= this && (format||= :default) && I18n.backend.localize(I18n.locale, this, format) %></def>
+<def tag="view" for="date" attrs="format"><%= this && (format||= :default) && I18n.backend.localize(I18n.locale, this, format) %></def>
 
 <!-- Renders `this` in localized :default format. `format` can be a symbol representing a Time::DATE_FORMATS or a standard format string (see strftime) -->
-  <def tag="view" for="Time" attrs="format"><%= this && (format||= :time) && (format.is_a?(Symbol) ? this.to_s(format) : this.strftime(format) ) %></def>
+  <def tag="view" for="time" attrs="format"><%= this && (format||= :time) && (format.is_a?(Symbol) ? this.to_s(format) : this.strftime(format) ) %></def>
 
 <!-- Renders `this` in localized :default format. `format` can be a symbol representing a locale key or a standard format string (see strftime) -->
-<def tag="view" for="ActiveSupport::TimeWithZone" attrs="format"><%= this && (format||= :default) && I18n.backend.localize(I18n.locale, this, format) %></def>
+<def tag="view" for="datetime" attrs="format"><%= this && (format||= :default) && I18n.backend.localize(I18n.locale, this, format) %></def>
 
 <!-- Renders localized `number_with_delimiter this`, or `format % this` if the `format` attribute is given -->
 <def tag="view" for="Numeric" attrs="format"><%= format ? format % this : number_with_delimiter(this) %></def>
@@ -564,7 +566,7 @@ You can pass a summary attribute, which will generate a complete localized sente
   raise Exception.new("asked for count of a string") if this.is_a?(String)
   Rails.logger.warn('The "prefix" attribute is deprecated: please, use a locale string') unless prefix.blank?
 
-  c = this.try.to_int || this.try.total_entries || (this.try.loaded? && this.try.length) || this.try.count || this.try.length
+  c = collection_count
 
   # generated label will be pluralized
   label ||= case
@@ -772,7 +774,7 @@ Notes
 
 <!-- Development mode only - a menu to change the `current_user` -->
 <def tag="dev-user-changer">
-  <set user="&Hobo::Model::User.default_user_model"/>
+  <set user="&Hobo::Model::UserBase.default_user_model"/>
   <select-menu if="&user && Rails.env.development?"
                first-option="#{t('hobo.dev_user_changer.guest', {:default=>'Guest'})}" options="&user.all(:limit => 30).*.login"
                onchange="location.href = '#{dev_support_path :action=>:set_current_user}?login=' + encodeURIComponent(this.options[this.selectedIndex].value)"
