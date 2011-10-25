@@ -197,7 +197,7 @@ The standard form tag does not have any parameters, nor does it have any default
 
     if update || !ajax_attrs.empty?
       # add an onsubmit to convert to an ajax form if `update` is given
-      function = ajax_updater(:post_form, update, ajax_attrs)
+      function = ajax_updater(:post_form, update, ajax_attrs.merge(:method => method))
       html_attrs[:onsubmit] = [html_attrs[:onsubmit], "#{function}; return false;"].compact.safe_join("; ".html_safe)
     end
 
