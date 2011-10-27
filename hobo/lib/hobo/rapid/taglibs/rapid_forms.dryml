@@ -320,6 +320,8 @@ If the context is a `has_many :through` association, the polymorphic `<collectio
                       else
                         input_many(attrs)
                       end
+                    elsif refl.macro == :composed_of
+                      call_polymorphic_tag('input', refl.klass, attrs)
                     end
                   else
                     call_polymorphic_tag('input', attrs) or

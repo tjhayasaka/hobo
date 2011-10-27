@@ -245,7 +245,7 @@ module Hobo
           return false if !respond_to?("#{attribute}=")
 
           refl = self.class.reflections[attribute.to_sym]
-          if refl && refl.macro != :belongs_to # a belongs_to is handled the same as a regular attribute
+          if refl && refl.macro != :belongs_to && refl.macro != :composed_of # a belongs_to and a composed_of are handled the same as a regular attribute
             return association_editable_by?(user, refl)
           end
         end
