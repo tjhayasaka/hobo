@@ -86,10 +86,9 @@ var Hobo = {
         }
         var params = []
 
-        if (typeof(formAuthToken) != "undefined") {
+        if (typeof(formAuthToken) != "undefined" && (!options.method || options.method.toLowerCase() != "get")) {
             params.push(formAuthToken.name + "=" + formAuthToken.value)
         }
-
         updateParams = Hobo.ajaxUpdateParams(updates, options.resultUpdate)
         if (updateParams != "") { params.push(updateParams) }
 
