@@ -840,13 +840,14 @@ An input for `has_many :through` associations that lets the user chose the items
 
 To use this tag, the model of the items the user is chosing *must* have unique names, and the
 -->
-<def tag="select-many" attrs="options, targets, remove-label, prompt, disabled, name"><%
+<def tag="select-many" attrs="options, targets, remove-label, prompt, disabled, name, text-method"><%
   prompt ||= ht("#{this_field_reflection.klass.to_s.underscore}.form.select_many.prompt", :default=>"Add #{this_field.titleize.singularize}")
   options ||= this_field_reflection.klass.all(:conditions =>this.send(:conditions)).select {|x| can_view?(x)}
   name ||= param_name_for_this
 
   values = this
   remove_label ||= t("hobo.actions.remove", :default=>'Remove')
+  text_method ||= ""
   -%>
   <div class="input select-many" merge-attrs>
     <div style="display:none" class="item-proto">
@@ -858,7 +859,8 @@ To use this tag, the model of the items the user is chosing *must* have unique n
     </div>
     <div class="items">
       <div class="item" param="item" repeat>
-        <span><%= h this.to_s %></span>
+	<% label = text_method.split(".").inject(this) { |v, method| v.send(method) }.to_s %>
+        <span><%= h label %></span>
         <input type="hidden" name="#{name}[]" value="@#{h this.id}" disabled="&disabled"
                param="hidden"/>
         <input type="button" class="remove-item" value="#{remove_label}" disabled="&disabled"
@@ -868,11 +870,12 @@ To use this tag, the model of the items the user is chosing *must* have unique n
     <select merge-attrs="&{:disabled => disabled}">
       <option value=""><prompt/></option>
       <repeat with="&options">
+	<% label = text_method.split(".").inject(this) { |v, method| v.send(method) }.to_s %>
         <if test="&this.in?(values)">
-          <optgroup class="disabled-option" label="#{h this.to_s}" alt="@#{this.id}">&nbsp;</optgroup>
+          <optgroup class="disabled-option" label="#{h label}" alt="@#{this.id}">&nbsp;</optgroup>
         </if>
         <else>
-          <option value="@#{this.id}"><%= h this.to_s %></option>
+          <option value="@#{this.id}"><%= h label %></option>
         </else>
       </repeat>
     </select>
