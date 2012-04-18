@@ -100,9 +100,9 @@ module Hobo
       end
 
       if Hobo::Routes.linkable?(klass, action, options)
-
         url = base_url_for(obj, subsite, action)
         url += "/#{action_path || action}" unless action.in?(IMPLICIT_ACTIONS)
+        url += ".#{options[:format]}" if options[:format]
 
         params = make_params(params)
         params.blank? ? url : "#{url}?#{params}"
